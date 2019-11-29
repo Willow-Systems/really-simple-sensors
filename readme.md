@@ -80,7 +80,7 @@ The information for a door sensor is returned in the following format:
 
 
 
-`"sensor_name": {
+` {"sensor_name": {
 
         "lastHeard": "2019-11-28T18:35:23.943Z",
 
@@ -88,7 +88,8 @@ The information for a door sensor is returned in the following format:
 
         "webhooks": []
 
-}`
+	}
+} `
 
 
 
