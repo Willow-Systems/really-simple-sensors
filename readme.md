@@ -1,6 +1,6 @@
 # Really Simple Sensors
 
-### Simple IOT door sensors
+### Simple IOT sensors for home automation
 
 
 
@@ -195,7 +195,7 @@ Response Example: `2019-11-28T18:35:23.943Z`
 
 
 
-**5) Register a webhook for a server**   
+**5) Register a webhook for a sensor**   
 
 Request Format: POST /webhooks   
 
