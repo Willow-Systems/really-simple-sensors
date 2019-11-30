@@ -22,7 +22,7 @@ The documentation is also lacking (this is it), so if you want to set it up your
 
 /sensorFirmware - The code for the sensors   
 
-/3dPrinterFiles - Any 3d printed parts, such as cases 
+/3dPrinterFiles - Any 3d printed parts, such as cases
 
 
 
@@ -62,7 +62,7 @@ To setup the system, perform the following actions:
 
 - Edit the server code to define the sensors you want.
 
-- Edit the sensor firmware to point to the central server. 
+- Edit the sensor firmware to point to the central server.
 
 - Install your sensors
 
@@ -89,7 +89,7 @@ The information for a door sensor is returned in the following format:
         "webhooks": []
 
 	}
-} 
+}
 
 
 
@@ -153,7 +153,7 @@ Request Example: `curl -s http://myCentralServer.local/sensors/front_door`
 
 Response Format: All the information on the provided sensor     
 
-Response Example: 
+Response Example:
 
 `{
 
@@ -165,7 +165,7 @@ Response Example:
 
  }`
 
- 
+
 
 **3) Get the state of a specific sensor**   
 
@@ -199,7 +199,7 @@ Response Example: `2019-11-28T18:35:23.943Z`
 
 Request Format: POST /webhooks   
 
-POST data Format: `{"sensor":"$sensorName","method":"$method","url":"$webhookURL"}`   
+POST data Format: `{"sensor":"$sensorName","method":"$method","url":"$webhookURL","trigger":"all"}`   
 
 Request Example: `curl -X POST -d '{"sensor":"front_door","method":"GET","url":"https://ifttt.com/my_ifttt_endpoint/"}' http://myCertralServer.local/webhooks/`   
 
@@ -239,18 +239,28 @@ The webhook will then be present in a full info return. E.g. `curl -s http://myC
 
 
 
-You can register webhooks against a door sensor, these will be called every time the sensor sends an update to the central server. See API examples 2 and 5 for examples of how to retrieve and create webhooks against a sensor. 
-
+You can register webhooks against a door sensor, these will be called every time the sensor sends an update to the central server. See API examples 2 and 5 for examples of how to retrieve and create webhooks against a sensor.
 
 
 As of the current version of the server, only HTTP GET is supported, and no HTTPS. Webhooks are also not yet persisted upon server restart.   
+
+#### POST Parameters
+
+As per example 5, the following paramters should be passed in the POST request to /webhooks:
+
+- sensor  -  The name of the sensor to which the webhook will be attached
+- method  -  The HTTP request method (currently only supports GET)
+- url     -  The URL of the webhook endpoint to call (currently must be http only)
+
+Furthermore, there are some optional parameters:
+
+- trigger  -  (all, closed, open) - If set to 'all', the webhook will be called whenever the sensor state changes. Otherwise if set to 'closed' or 'open', the webhook will only be called when the state changes to the value provided. If the parameter is not provided, it will default to 'all'.
 
 
 
 #### Attributes
 
-You can include attributes in the webhook, which are variables which the server resolves before calling the endpoint. Currently the supported attributes are:
-
+You can include attributes in the webhook url, which are variables which the server resolves before calling the endpoint. Currently the supported attributes are:
 
 
 - {{state}}  -  The state of the door sensor ('open' or 'closed').
@@ -286,7 +296,3 @@ This project is in it's early stage, but the items on the roadmap are:
 - [ ] Add support for a sensor -> server startup ping
 
 - [ ] Move to MQTT for server communcation
-
-
-
-

@@ -2,6 +2,7 @@ const express = require("express");
 const http = require('http');
 const app = express();
 const port = 8080;
+const version = 0.2
 
 //Custom middleware to let us get the whole post body
 app.use(function(req, res, next) {
@@ -91,8 +92,10 @@ app.get('/update/:state', function(req,res) {
     var wh = sensors[r.id].webhooks
     for (var i = 0; i < wh.length; i++) {
 
-      if (wh[i].method == "GET") {
-        makeGetRequest(r.id, wh[i].url);
+      if (wh[i].trigger == "all" || wh[i].trigger == r.state) {
+        if (wh[i].method == "GET") {
+          makeGetRequest(r.id, wh[i].url);
+        }
       }
 
     }
@@ -192,6 +195,15 @@ app.post("/webhooks/", function(req,res) {
     res.end('{"error":"Missing parameter: url"}')
     return
   }
+  if (b.trigger == null || b.trigger == "") {
+    b.trigger = "all"
+  } else {
+    if (b.trigger != "all" && b.trigger != "open" && b.trigger != "closed") {
+      res.status(400);
+      res.end('{"error":"Invalid value \'' + b.trigger + '\' for  parameter \'trigger\'. Expected \'all\',\'open\', or \'closed\'"}')
+      return
+    }
+  }
 
   if (sensors[b.sensor] == null) {
     res.status(400);
@@ -203,6 +215,7 @@ app.post("/webhooks/", function(req,res) {
   wh.method = b.method;
   wh.url = b.url;
   wh.id = uuidv4();
+  wh.trigger = b.trigger;
 
   sensors[b.sensor].webhooks.push(wh);
   res.status(200);
