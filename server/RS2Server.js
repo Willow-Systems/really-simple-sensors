@@ -2,7 +2,7 @@ const express = require("express");
 const http = require('http');
 const app = express();
 const port = 8080;
-const version = 0.2
+const version = 0.3
 
 //Custom middleware to let us get the whole post body
 app.use(function(req, res, next) {
@@ -221,6 +221,32 @@ app.post("/webhooks/", function(req,res) {
   res.status(200);
   res.end("ok");
 
+
+});
+app.delete("/webooks/:id", function(req,res) {
+  console.log("Delete webhook id " + req.params.id + " request");
+  var wasSuccessful = false;
+
+  for (var sensor in sensors) {
+    if (sensors.hasOwnProperty(sensor)) {
+      for (var i = 0; i < sensors[sensor].webhooks.length; i++) {
+        if (sensors[sensor].webhooks[i].id == req.params.id) {
+          sensors[sensor].webhooks.pop(i);
+          wasSuccessful = true;
+        }
+      }
+    }
+  }
+
+  if (wasSuccessful) {
+    res.status(200);
+    res.end("ok");
+    return;
+  } else {
+    res.status(400);
+    res.end('{"error":"No webhook found with provided ID"}');
+    return;
+  }
 
 });
 
