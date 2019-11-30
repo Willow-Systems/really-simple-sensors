@@ -233,12 +233,14 @@ The webhook will then be present in a full info return. E.g. `curl -s http://myC
 
 }`
 
-**6) Delete a webhook **
-Request Format: DELETE /webhooks/$webhookID
-Request Example: `curl -s -X DELETE http://myCentralServer.local/webhooks/bc2do754-4014`
 
-Response Format: 'ok' on success, error message on failure
-Response Example: `ok`
+
+**6) Delete a webhook**   
+Request Format: DELETE /webhooks/$webhookID   
+Request Example: `curl -s -X DELETE http://myCentralServer.local/webhooks/bc2do754-4014`    
+     
+Response Format: 'ok' on success, error message on failure    
+Response Example: `ok`      
 
 
 ### Webhooks
