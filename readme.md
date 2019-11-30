@@ -233,6 +233,12 @@ The webhook will then be present in a full info return. E.g. `curl -s http://myC
 
 }`
 
+**6) Delete a webhook **
+Request Format: DELETE /webhooks/$webhookID
+Request Example: `curl -s -X DELETE http://myCentralServer.local/webhooks/bc2do754-4014`
+
+Response Format: 'ok' on success, error message on failure
+Response Example: `ok`
 
 
 ### Webhooks
@@ -256,6 +262,8 @@ Furthermore, there are some optional parameters:
 
 - trigger  -  (all, closed, open) - If set to 'all', the webhook will be called whenever the sensor state changes. Otherwise if set to 'closed' or 'open', the webhook will only be called when the state changes to the value provided. If the parameter is not provided, it will default to 'all'.
 
+
+When a webhook is created, it will be given a UUID. This can be found by calling /sensor/$sensorID. The UUID is used to delete the webhook (see example 6 above)
 
 
 #### Attributes
